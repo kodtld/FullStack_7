@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, useParams
+  Routes, Route, Link, useParams, useNavigate
 } from "react-router-dom"
 
 const AnecdoteList = ({ anecdotes }) => (
@@ -51,7 +51,19 @@ const Footer = () => (
   </div>
 )
 
+const Notification = (props) =>{
+  let notif = props.notif
+  if (!(notif === "")){
+    return(
+      <div>
+        <h3>{notif}</h3>
+      </div>
+    )
+  }
+}
+
 const CreateNew = (props) => {
+  const nav = useNavigate()
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
@@ -65,7 +77,10 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    nav('/')
+
   }
+  
 
   return (
     <div>
@@ -119,10 +134,16 @@ const App = () => {
   }
 
   const [notification, setNotification] = useState('')
+  
+  const handleNotification = notif => {
+    setNotification(notif)
+  }
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    handleNotification("'"+anecdote.content+"'"+" created!")
+    setTimeout(() => handleNotification(""), 5000)
   }
 
   const anecdoteById = (id) =>
@@ -142,6 +163,7 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
+      <Notification notif={notification}/>
       <Router>
         <div>
           <Link style={padding} to="/">Home</Link>
