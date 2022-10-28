@@ -89,21 +89,28 @@ const CreateNew = (props) => {
     info.reset()
   }
 
+  const inputStyle = {
+    fontSize:18,
+    marginBottom: 4,
+    marginRight:5,
+    padding: 5
+  }
+
   return (
     <div>
-      <h2>create a new anecdote</h2>
+      <h2>Create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <input name='content' {...content} reset={null} placeholder="Content..."/>
+          <input style={inputStyle} name='content' {...content} reset={null} placeholder="Content..."/>
         </div>
         <div>
-          <input name='author' {...author} reset={null} placeholder="Author..."/>
+          <input style={inputStyle} name='author' {...author} reset={null} placeholder="Author..."/>
         </div>
         <div>
-          <input name='info' {...info} reset={null} placeholder="Url..." />
+          <input style={inputStyle} name='info' {...info} reset={null} placeholder="Url..." />
         </div>
-        <input type='submit' value='Create'/>
-        <input type='button'  value='Reset' onClick={resetFields} />
+        <input style={inputStyle} type='submit' value='Create'/>
+        <input style={inputStyle} type='button'  value='Reset' onClick={resetFields} />
       </form>
     </div>
   )
@@ -133,9 +140,10 @@ const App = () => {
     padding:5,
     border:'solid',
     borderColor:'black',
-    borderRadius: 5,
-    borderWidth:2,
-    backgroundColor:"lightblue"
+    borderWidth:1,
+    backgroundColor:"lightgrey",
+    fontSize:18,
+    marginBottom: 4,
   }
 
   const [notification, setNotification] = useState('')
