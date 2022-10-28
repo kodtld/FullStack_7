@@ -1,23 +1,23 @@
-const Notification = ({message,notifStatus}) => {
-    let notifStyle = null
-    if (message === null) {
-      return null
-    }
-    
-    if (notifStatus === "green"){
-        notifStyle={color: "green"}
-    }
-
-    if (notifStatus === "red"){
-        notifStyle={color: "red"}
-    }
-
-
-    return (
-      <div className="error" style={notifStyle}>
-        {message}
-      </div>
-    )
+const Notification = ({ notification }) => {
+  if (notification === null) {
+    return null
   }
-  
-  export default Notification
+
+  const style = {
+    color: notification.type === 'alert' ? 'red' : 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  return (
+    <div id='notification' style={style}>
+      {notification.message}
+    </div>
+  )
+}
+
+export default Notification

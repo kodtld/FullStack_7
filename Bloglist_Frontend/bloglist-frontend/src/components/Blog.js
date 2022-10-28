@@ -1,36 +1,70 @@
-import { useState } from "react"
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 
-const Blog = ({ title,author,url,likes,id, updateBlog, removeBlog}) => {
-  const [more,setMore] =useState(false)
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
+const BlogDetails = ({ blog, visible, likeBlog, removeBlog, own }) => {
+  if (!visible) return null
+
+  const addedBy = blog.user && blog.user.name ? blog.user.name : 'anonymous'
+
+  return (
+    <div>
+      <div>
+        <a href={blog.url}>{blog.url}</a>
+      </div>
+      <div>
+        {blog.likes} Likes <button onClick={() => likeBlog(blog.id)}>like</button>
+      </div>
+      Added by: {addedBy}
+      {own&&<button onClick={() => removeBlog(blog.id)}>
+        Remove
+      </button>}
+    </div>
+  )
+}
+
+const Blog = ({ blog, likeBlog, removeBlog, user }) => {
+  const [visible, setVisible] = useState(false)
+
+  const style = {
+    padding: 3,
+    margin: 5,
+    borderStyle: 'solid',
     borderWidth: 1,
-    marginBottom: 5
   }
 
-  if (more === true){  return (
-    <div style={blogStyle}>
-      <div> 
-        Title: {title} < br/> 
-        Author: {author} < br/>
-        URL: {url} < br/>
-        Likes: {likes} <button onClick={() => updateBlog(id)}>Like</button> < br/>
-        <button onClick={() => setMore(false)}>Hide</button> < br/>
-        <button onClick={() => removeBlog(id)}>Remove blog</button>
-      </div>
-  </div>
-  )}
-
-  if (more === false){  return (
-    <div style={blogStyle}>
-      <div> 
-        Title: {title} < br/>
-        Author: {author}
-        <button onClick={() => setMore(true)}>Show more</button>
-      </div>
-  </div>
-  )}
+  return (
+    <div style={style} className='blog'>
+      "{blog.title}" by:  {blog.author}
+      <button onClick={() => setVisible(!visible)}>
+        {visible ? 'hide' : 'view'}
+      </button>
+      <BlogDetails
+        blog={blog}
+        visible={visible}
+        likeBlog={likeBlog}
+        removeBlog={removeBlog}
+        own={blog.user && user.username===blog.user.username}
+      />
+    </div>
+  )
 }
+
+Blog.propTypes = {
+  blog: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    likes: PropTypes.number.isRequired,
+    user: PropTypes.shape({
+      username: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  }).isRequired,
+  user: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+  }),
+  likeBlog: PropTypes.func.isRequired,
+  removeBlog: PropTypes.func.isRequired,
+}
+
 export default Blog

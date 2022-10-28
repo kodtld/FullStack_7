@@ -1,51 +1,33 @@
 import axios from 'axios'
-const baseUrl = 'api/blogs'
+import userService  from './user'
 
-let token = null
+const baseUrl = '/api/blogs'
 
-const setToken = newToken => {
-    console.log("service set token")
-    token = `bearer ${newToken}`
+const config = () => {
+  return {
+    headers: {
+      Authorization: `bearer ${userService.getToken()}`
+    },
+  }
 }
 
-const getAll = async () => {
-  console.log("getall")
-  const config = {
-    headers: { Authorization: token },
-  }
-  console.log("config: ", config);
-  const request = await axios.get(baseUrl, config)
-  return request.data
+const getAll = () => {
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
 }
 
 const create = async newObject => {
-  console.log("servicepost")
-  const config = {
-    headers: { Authorization: token },
-  }
-
-  const response = await axios.post(baseUrl, newObject, config)
+  const response = await axios.post(baseUrl, newObject, config())
   return response.data
 }
 
 const update = (id, newObject) => {
-  const config = {
-    headers: { Authorization: token },
-  }
-  const request = axios.put(`${baseUrl}/${id}`, newObject,config)
+  const request = axios.put(`${baseUrl}/${id}`, newObject)
   return request.then(response => response.data)
 }
 
-const remove = id => {
-  const config = {
-    headers: { Authorization: token },
-  }
-  const request = axios.delete(`${baseUrl}/${id}`,config)
-  return request.then(response => response.data)
+const remove = (id) => {
+  return axios.delete(`${baseUrl}/${id}`, config())
 }
 
-const forex = {
-  getAll, create, update, remove, setToken
-}
-
-export default forex;
+export default { getAll, create, update, remove }

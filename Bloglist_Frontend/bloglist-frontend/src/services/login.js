@@ -6,8 +6,4 @@ const login = async credentials => {
   return response.data
 }
 
-const forex = {
-  login
-}
-
-export default forex;
+export default { login }
